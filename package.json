@@ -1,0 +1,47 @@
+{
+  "name": "angles-wdio-reporter",
+  "version": "1.0.0",
+  "description": "This package contains the custom reporter to push your wdio test results to Angles.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist/ && tsc",
+    "start": "node dist/index.js",
+    "format": "prettier --write \"src/**/*.ts\" \"dist/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnglesHQ/angles-wdio-reporter.git"
+  },
+  "keywords": [
+    "testing",
+    "automation",
+    "dashboard",
+    "reporting",
+    "qa",
+    "angles",
+    "wdio"
+  ],
+  "author": "Sergio Neves Barros",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/AnglesHQ/angles-wdio-reporter/issues"
+  },
+  "homepage": "https://angleshq.github.io",
+  "dependencies": {
+    "@wdio/spec-reporter": "^7.16.3",
+    "angles-javascript-client": "^1.0.15",
+    "ts-node": "^10.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.37",
+    "prettier": "^2.2.1",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^4.2.3"
+  },
+  "files": [
+    "dist/**/*"
+  ]
+}
