@@ -30,5 +30,4 @@ To integrate the Angles Dashboard with your webdriverIO test, we have set-up a c
   ]
 }
 ```
-
-More integration examples to come.
+An example of how this has been used in a test can be found in the [webdriverio-example](https://github.com/AnglesHQ/webdriverio-example) project.
