@@ -1,7 +1,9 @@
 /* tslint:disable:no-console */
-import WDIOReporter from '@wdio/reporter'
+import WDIOReporter,{ RunnerStats, TestStats } from '@wdio/reporter'
+import { Capabilities } from '@wdio/types';
 import anglesReporter from 'angles-javascript-client';
 import {Artifact} from "angles-javascript-client/dist/lib/models/Artifact";
+import {Platform} from "angles-javascript-client/dist/lib/models/Platform";
 
 export class AnglesWDIOReporter extends WDIOReporter {
 
@@ -14,6 +16,7 @@ export class AnglesWDIOReporter extends WDIOReporter {
   component: string;
   phase: string;
   artifacts: Artifact[];
+  capabilities: Capabilities.RemoteCapability;
 
   constructor(options: any) {
     super(options)
@@ -26,56 +29,46 @@ export class AnglesWDIOReporter extends WDIOReporter {
     this.component = options.component || 'wdio-example';
     this.phase = options.phase || undefined;
     this.artifacts = options.artifacts || undefined;
-
     anglesReporter.setBaseUrl(this.baseUrl);
-    anglesReporter.startBuild(
-      this.buildName,
-      this.team,
-      this.environment,
-      this.component,
-      this.phase,
-    ).then((build) => {
-      process.env.ANGLES_ID = build._id;
-      console.log(`Created build with id ${process.env.ANGLES_ID} in Angles`);
-      if (this.artifacts) {
-        const artifactArray: Artifact[] = [];
-        this.artifacts.forEach((artifact) => {
-          const { groupId, artifactId, version } = artifact;
-          artifactArray.push(new Artifact(groupId, artifactId, version))
-        })
-        anglesReporter.addArtifacts(artifactArray).then((buildWithArtifacts) => {
-          console.log(`Stored artifacts for build ${buildWithArtifacts._id}`);
-        });
-      }
-    });
   }
 
-  async onRunnerStart() {
-    if (this.isEnabled) {
+  async onRunnerStart(runnerStats:RunnerStats) {
+    if (this.isEnabled && process.env.ANGLES_ID) {
       anglesReporter.setBaseUrl(this.baseUrl);
+      this.capabilities = runnerStats.capabilities;
       await anglesReporter.setCurrentBuild(process.env.ANGLES_ID);
     }
   }
 
-  async onTestStart(test: { title: string; parent: string; }) {
+  async onTestStart(test: TestStats) {
     if (this.isEnabled && process.env.ANGLES_ID) {
+      await anglesReporter.setCurrentBuild(process.env.ANGLES_ID);
       anglesReporter.startTest(test.title, test.parent);
+      const caps = this.capabilities as Capabilities.DesiredCapabilities
+      const { platformName, platformVersion, browserName, browserVersion, deviceName } = caps;
+      const platform: Platform = new Platform();
+      platform.platformName = platformName;
+      platform.platformVersion = platformVersion;
+      platform.browserName = browserName;
+      platform.browserVersion = browserVersion;
+      platform.deviceName = deviceName;
+      anglesReporter.storePlatformDetails(platform)
     }
   }
 
-  async onTestPass(test: { title: any; }) {
+  async onTestPass(test: TestStats) {
     if (this.isEnabled && process.env.ANGLES_ID) {
       anglesReporter.pass(`Test ${test.title} has passed`, 'Test Passed', 'Test Passed', '');
     }
   }
 
-  async onTestFail(test: { title: any; }) {
+  async onTestFail(test: TestStats) {
     if (this.isEnabled && process.env.ANGLES_ID) {
       anglesReporter.fail(`Test ${test.title} has failed`, 'Test Passed', 'Test Failed', '');
     }
   }
 
-  async onTestSkip(test: { title: any; }) {
+  async onTestSkip(test: TestStats) {
     if (this.isEnabled && process.env.ANGLES_ID) {
       anglesReporter.info(`Test ${test.title} has skipped`);
     }
