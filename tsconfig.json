@@ -15,7 +15,8 @@
     "rootDir": "src/",
     "outDir": "dist/",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "types": ["node", "webdriverio/async"]
   },
   "include": [
     "src/**/*"
