@@ -2,6 +2,7 @@
 import anglesReporter from "angles-javascript-client";
 import { Artifact } from "angles-javascript-client/dist/lib/models/Artifact";
 import { Reporters, Options } from '@wdio/types'
+import { SevereServiceError } from 'webdriverio';
 
 export class AnglesWDIOService {
 
@@ -51,6 +52,9 @@ export class AnglesWDIOService {
             console.log(`Stored artifacts for build ${buildWithArtifacts._id}`);
           });
         }
+      })
+      .catch((err) => {
+        throw new SevereServiceError(`Unable to create a build due to ${err.message}. Stopping test run.`);
       });
     }
   }
