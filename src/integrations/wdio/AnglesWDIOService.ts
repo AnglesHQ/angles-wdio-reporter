@@ -41,7 +41,7 @@ export class AnglesWDIOService {
         phase,
       ).then((build) => {
         process.env.ANGLES_ID = build._id;
-        console.log(`Created build with id ${process.env.ANGLES_ID} in Angles`);
+        console.log(`Created Angles build with id ${process.env.ANGLES_ID} in Angles`);
         if (artifacts) {
           const artifactArray:Artifact[] = [];
           artifacts.forEach((artifact:Artifact) => {
@@ -54,7 +54,7 @@ export class AnglesWDIOService {
         }
       })
       .catch((err) => {
-        throw new SevereServiceError(`Unable to create a build due to ${err.message}. Stopping test run.`);
+        throw new SevereServiceError(`Unable to create an Angles build due to ["${err.message}"]. Stopping the test run.`);
       });
     }
   }

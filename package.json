@@ -21,7 +21,9 @@
     "reporting",
     "qa",
     "angles",
-    "wdio"
+    "wdio",
+    "wdio-service",
+    "wdio-plugin"
   ],
   "author": "Sergio Neves Barros",
   "license": "Apache-2.0",
@@ -30,9 +32,9 @@
   },
   "homepage": "https://angleshq.github.io",
   "dependencies": {
-    "@wdio/spec-reporter": "^7.16.3",
+    "@wdio/spec-reporter": "^7.16.14",
     "@wdio/sync": "^7.16.16",
-    "angles-javascript-client": "^1.0.22",
+    "angles-javascript-client": "^1.0.24",
     "ts-node": "^10.6.0",
     "webdriverio": "^7.16.16"
   },
