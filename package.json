@@ -32,10 +32,11 @@
   },
   "homepage": "https://angleshq.github.io",
   "dependencies": {
+    "webdriverio": "^7.16.16",
     "@wdio/spec-reporter": "^7.16.14",
+    "@wdio/types": "^7.16.14",
     "angles-javascript-client": "^1.0.25",
-    "ts-node": "^10.6.0",
-    "webdriverio": "^7.16.16"
+    "ts-node": "^10.6.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.37",
