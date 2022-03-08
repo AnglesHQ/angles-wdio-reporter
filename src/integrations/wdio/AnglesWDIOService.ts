@@ -9,6 +9,10 @@ export class AnglesWDIOService {
   anglesEnabled: boolean;
   reportingUrl: string;
 
+  private ifSet(object: any , path: string) {
+    return path.split('.').reduce((obj, part) => obj && obj[part], object)
+  }
+
   async onPrepare(config: Options.Testrunner) {
     let reporterConfig:any = {};
     const reporters: Reporters.ReporterEntry[] = config.reporters;
@@ -53,8 +57,13 @@ export class AnglesWDIOService {
           });
         }
       })
-      .catch((err) => {
-        throw new SevereServiceError(`Unable to create an Angles build due to ["${err.message}"]. Stopping the test run.`);
+      .catch((error) => {
+        const { response } = error;
+        let { message } = error;
+        if (this.ifSet(response, 'data.message')) {
+          message = response.data.message;
+        }
+        throw new SevereServiceError(`Unable to create an Angles build due to ["${message}"]. Stopping the test run.`);
       });
     }
   }

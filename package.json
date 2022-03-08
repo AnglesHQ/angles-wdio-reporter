@@ -33,8 +33,7 @@
   "homepage": "https://angleshq.github.io",
   "dependencies": {
     "@wdio/spec-reporter": "^7.16.14",
-    "@wdio/sync": "^7.16.16",
-    "angles-javascript-client": "^1.0.24",
+    "angles-javascript-client": "^1.0.25",
     "ts-node": "^10.6.0",
     "webdriverio": "^7.16.16"
   },
