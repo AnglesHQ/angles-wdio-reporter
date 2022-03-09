@@ -45,19 +45,27 @@ export class AnglesWDIOReporter extends WDIOReporter {
       await anglesReporter.setCurrentBuild(process.env.ANGLES_ID);
       anglesReporter.startTest(test.title, test.parent);
       const caps = this.capabilities as Capabilities.DesiredCapabilities;
-      const { platformName, platformVersion, browserName, browserVersion, deviceName } = caps;
+      const { platformName, platform, version, platformVersion, browserName, browserVersion, deviceName } = caps;
       const { testobject_device } = caps as any;
-      const platform: Platform = new Platform();
-      platform.platformName = platformName;
-      platform.platformVersion = platformVersion;
-      platform.browserName = browserName;
-      platform.browserVersion = browserVersion;
-      if (testobject_device) {
-        platform.deviceName = testobject_device;
-      } else if (deviceName) {
-        platform.deviceName = deviceName;
+      const testPlatform: Platform = new Platform();
+      if (platformName) {
+        testPlatform.platformName = platformName;
+      } else if (platform) {
+        testPlatform.platformName = platform;
       }
-      anglesReporter.storePlatformDetails(platform)
+      if (platformVersion) { testPlatform.platformVersion = platformVersion; }
+      if (browserName) { testPlatform.browserName = browserName; }
+      if (browserVersion) {
+        testPlatform.browserVersion = browserVersion;
+      } else if (version) {
+        testPlatform.browserVersion = version;
+      }
+      if (testobject_device) {
+        testPlatform.deviceName = testobject_device;
+      } else if (deviceName) {
+        testPlatform.deviceName = deviceName;
+      }
+      anglesReporter.storePlatformDetails(testPlatform)
     }
   }
 
