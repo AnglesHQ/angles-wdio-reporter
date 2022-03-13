@@ -3,15 +3,12 @@ import anglesReporter from "angles-javascript-client";
 import { Artifact } from "angles-javascript-client/dist/lib/models/Artifact";
 import { Reporters, Options } from '@wdio/types'
 import { SevereServiceError } from 'webdriverio';
+import { ifSet } from "../utils/common-utils";
 
 export class AnglesWDIOService {
 
   anglesEnabled: boolean;
   reportingUrl: string;
-
-  private ifSet(object: any , path: string) {
-    return path.split('.').reduce((obj, part) => obj && obj[part], object)
-  }
 
   async onPrepare(config: Options.Testrunner) {
     let reporterConfig:any = {};
@@ -60,7 +57,7 @@ export class AnglesWDIOService {
       .catch((error) => {
         const { response } = error;
         let { message } = error;
-        if (this.ifSet(response, 'data.message')) {
+        if (ifSet(response, 'data.message')) {
           message = response.data.message;
         }
         throw new SevereServiceError(`Unable to create an Angles build due to ["${message}"]. Stopping the test run.`);

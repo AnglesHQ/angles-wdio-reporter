@@ -4,6 +4,8 @@ import { Capabilities } from '@wdio/types';
 import anglesReporter from 'angles-javascript-client';
 import {Artifact} from "angles-javascript-client/dist/lib/models/Artifact";
 import {Platform} from "angles-javascript-client/dist/lib/models/Platform";
+import {Execution} from "angles-javascript-client/dist/lib/models/Execution";
+import { ifSet } from "../utils/common-utils";
 
 export class AnglesWDIOReporter extends WDIOReporter {
 
@@ -89,7 +91,20 @@ export class AnglesWDIOReporter extends WDIOReporter {
 
   async onTestEnd() {
     if (this.isEnabled && process.env.ANGLES_ID) {
-      await anglesReporter.saveTest();
+      anglesReporter.saveTest()
+        .then((execution: Execution) => {
+          console.debug(`Saved execution ${execution.title} with id ${execution._id}`)
+        })
+        .catch((error) => {
+          const { response } = error;
+          let { message } = error;
+          if (ifSet(response, 'data.message')) {
+            message = response.data.message;
+          }
+          console.error(`Unable to save test in Angles due to : ${message}`);
+          // TODO: find an error that will impact wdio.
+          throw new Error(`Unable to save test in Angles due to : ${message}`);
+        });
     }
   }
 
