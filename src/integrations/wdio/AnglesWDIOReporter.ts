@@ -3,9 +3,8 @@ import WDIOReporter,{ RunnerStats, TestStats } from '@wdio/reporter'
 import { Capabilities } from '@wdio/types';
 import anglesReporter from 'angles-javascript-client';
 import {Artifact} from "angles-javascript-client/dist/lib/models/Artifact";
-import {Platform} from "angles-javascript-client/dist/lib/models/Platform";
 import {Execution} from "angles-javascript-client/dist/lib/models/Execution";
-import { ifSet } from "../utils/common-utils";
+import {extractPlatformFromCaps, ifSet} from "../utils/common-utils";
 
 export class AnglesWDIOReporter extends WDIOReporter {
 
@@ -36,7 +35,7 @@ export class AnglesWDIOReporter extends WDIOReporter {
 
   async onRunnerStart(runnerStats:RunnerStats) {
     if (this.isEnabled && process.env.ANGLES_ID) {
-      anglesReporter.setBaseUrl(this.baseUrl);
+      await anglesReporter.setBaseUrl(this.baseUrl);
       this.capabilities = runnerStats.capabilities;
       await anglesReporter.setCurrentBuild(process.env.ANGLES_ID);
     }
@@ -45,29 +44,9 @@ export class AnglesWDIOReporter extends WDIOReporter {
   async onTestStart(test: TestStats) {
     if (this.isEnabled && process.env.ANGLES_ID) {
       await anglesReporter.setCurrentBuild(process.env.ANGLES_ID);
-      anglesReporter.startTest(test.title, test.parent);
+      await anglesReporter.startTest(test.title, test.parent);
       const caps = this.capabilities as Capabilities.DesiredCapabilities;
-      const { platformName, platform, version, platformVersion, browserName, browserVersion, deviceName } = caps;
-      const { testobject_device } = caps as any;
-      const testPlatform: Platform = new Platform();
-      if (platformName) {
-        testPlatform.platformName = platformName;
-      } else if (platform) {
-        testPlatform.platformName = platform;
-      }
-      if (platformVersion) { testPlatform.platformVersion = platformVersion; }
-      if (browserName) { testPlatform.browserName = browserName; }
-      if (browserVersion) {
-        testPlatform.browserVersion = browserVersion;
-      } else if (version) {
-        testPlatform.browserVersion = version;
-      }
-      if (testobject_device) {
-        testPlatform.deviceName = testobject_device;
-      } else if (deviceName) {
-        testPlatform.deviceName = deviceName;
-      }
-      anglesReporter.storePlatformDetails(testPlatform)
+      await anglesReporter.storePlatformDetails(extractPlatformFromCaps(caps));
     }
   }
 
