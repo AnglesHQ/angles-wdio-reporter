@@ -1,6 +1,6 @@
 {
   "name": "angles-wdio-reporter",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "This package contains the custom reporter to push your wdio test results to Angles.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
