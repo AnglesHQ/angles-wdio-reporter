@@ -89,7 +89,7 @@ export class AnglesWDIOReporter extends WDIOReporter {
 
   onRunnerEnd() {
     if (this.isEnabled && process.env.ANGLES_ID) {
-      console.info(`Angles Dashboard Results: ${this.reportingUrl}/build/?buildId=${process.env.ANGLES_ID}`);
+      console.info(`Angles Dashboard Results: ${this.reportingUrl}/test-run/?buildId=${process.env.ANGLES_ID}`);
       process.env.ANGLES_ID = undefined;
     }
   }

@@ -67,7 +67,7 @@ export class AnglesWDIOService {
 
   onComplete() {
     if (this.anglesEnabled){
-      console.log(`The test results can be found here: ${this.reportingUrl}/build/?buildId=${process.env.ANGLES_ID}`)
+      console.log(`The test results can be found here: ${this.reportingUrl}/test-run/?buildId=${process.env.ANGLES_ID}`)
       process.env.ANGLES_ID = undefined;
     }
 
