@@ -28,12 +28,16 @@ export class AnglesWDIOService {
       phase,
       artifacts,
       baseUrl,
-      reportingUrl
+      reportingUrl,
+      userToken
     } = reporterConfig;
     this.reportingUrl = reportingUrl;
     this.anglesEnabled = enabled;
     if (enabled) {
       anglesReporter.setBaseUrl(baseUrl);
+      if (userToken) {
+        anglesReporter.setApiKey(userToken);
+      }
       return anglesReporter.startBuild(
         buildName,
         team,
