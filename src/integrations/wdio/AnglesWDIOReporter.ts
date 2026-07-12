@@ -16,6 +16,7 @@ export class AnglesWDIOReporter extends WDIOReporter {
   environment: string;
   component: string;
   phase: string;
+  userToken: string;
   artifacts: Artifact[];
   capabilities: Capabilities.RemoteCapability;
 
@@ -29,13 +30,20 @@ export class AnglesWDIOReporter extends WDIOReporter {
     this.environment = options.environment || 'qa';
     this.component = options.component || 'wdio-example';
     this.phase = options.phase || undefined;
+    this.userToken = options.userToken || undefined;
     this.artifacts = options.artifacts || undefined;
     anglesReporter.setBaseUrl(this.baseUrl);
+    if (this.userToken) {
+      anglesReporter.setApiKey(this.userToken);
+    }
   }
 
   async onRunnerStart(runnerStats:RunnerStats) {
     if (this.isEnabled && process.env.ANGLES_ID) {
       await anglesReporter.setBaseUrl(this.baseUrl);
+      if (this.userToken) {
+        await anglesReporter.setApiKey(this.userToken);
+      }
       this.capabilities = runnerStats.capabilities;
       await anglesReporter.setCurrentBuild(process.env.ANGLES_ID);
     }

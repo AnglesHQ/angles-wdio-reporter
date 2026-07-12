@@ -15,6 +15,7 @@ To integrate the Angles Dashboard with your webdriverIO test, we have set up a c
         buildName: 'Automated Test Run',
         baseUrl: 'http://127.0.0.1:3000/rest/api/v1.0/',
         reportingUrl: 'http://127.0.0.1:3001',
+        userToken: 'my-angles-api-token',
         team: 'angles',
         environment: 'qa',
         component: 'wdio-example',
